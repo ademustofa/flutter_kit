@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/provider/auth.provider.dart';
+import 'package:flutter_application_test/provider/profile.provider.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -29,10 +32,13 @@ class _LoginState extends State<Login> {
   }
 
   void handleLogin() {
-    print("ini adalah login dengan no hp: $phoneNumber");
-    setState(() {
-       _controller.clear();
-    });
+    final authModel = Provider.of<AuthProvider>(context, listen: false);
+    final profileModel = Provider.of<ProfileProvider>(context, listen: false);
+    authModel.setIsLogged();
+    profileModel.setProfiles();
+
+    // Navigate to the second screen
+    Navigator.pushNamed(context, '/home');
   }
 
   @override

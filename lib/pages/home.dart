@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_test/provider/auth.provider.dart';
+import 'package:flutter_application_test/provider/profile.provider.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,17 +13,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final profileModel = Provider.of<ProfileProvider>(context);
+    final authModel = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       body: SafeArea(child: Column(
         children: [
-           ElevatedButton.icon(
-                onPressed: () {
-                  // Add your onPressed logic here
-                  Navigator.pushNamed(context, '/login');
-                },
-                icon: Icon(Icons.edit_location),
-                label: Text('Edit Lcoation'),
-              ),
+          Text('is logged in ${authModel.isLoggin}'),
+           Text('My name is: ${profileModel.fullname}'),
+          Text('Contact: ${profileModel.noHp}'),
+          
         ],
       )),
     );
