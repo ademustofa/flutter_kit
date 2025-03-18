@@ -21,7 +21,7 @@ class _DataRegister extends State<DataRegister> {
               Navigator.pop(context);
             },
           ),
-          title: Text(
+          title: Text(    
             'Daftar Sebagai Agen',
             style: TextStyle(color: Colors.white),
           )),
