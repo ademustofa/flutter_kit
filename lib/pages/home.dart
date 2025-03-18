@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
       body: SafeArea(child: Column(
         children: [
           Text('is logged in ${authModel.isLoggin}'),
-           Text('My name is: ${profileModel.fullname}'),
+          Text('My Name is: ${profileModel.fullname}'),
           Text('Contact: ${profileModel.noHp}'),
           
         ],
