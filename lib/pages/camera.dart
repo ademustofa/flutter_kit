@@ -2,63 +2,94 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+  final List<CameraDescription> cameras;
+
+  CameraScreen({required this.cameras});
 
   @override
-  State<CameraScreen> createState() => _CameraScreenState();
+  _CameraScreenState createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  
-  
-  late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
+  CameraController? _cameraController;
+  bool _isRecording = false;
 
   @override
-  void initState() async {
-    
+  void initState() {
     super.initState();
+    _initializeCamera();
+  }
 
-    final cameras = await availableCameras();
-    final firstCamera = cameras.first;
-    _controller = CameraController(
-      firstCamera,
-      ResolutionPreset.medium,
+  Future<void> _initializeCamera() async {
+    _cameraController = CameraController(
+      widget.cameras[0], // Use the first camera
+      ResolutionPreset.high,
     );
-    _initializeControllerFuture = _controller.initialize();
+
+    await _cameraController!.initialize();
+    if (!mounted) return;
+    setState(() {});
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _cameraController?.dispose();
     super.dispose();
+  }
+
+  Future<void> _takePhoto() async {
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
+      return;
+    }
+
+    try {
+      final XFile photo = await _cameraController!.takePicture();
+      print('Photo saved to: ${photo.path}');
+    } catch (e) {
+      print('Error taking photo: $e');
+    }
+  }
+
+  Future<void> _recordVideo() async {
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
+      return;
+    }
+
+    if (_isRecording) {
+      final XFile videoFile = await _cameraController!.stopVideoRecording();
+      setState(() {
+        _isRecording = false;
+      });
+      print('Video saved to: ${videoFile.path}');
+    } else {
+      await _cameraController!.startVideoRecording();
+      setState(() {
+        _isRecording = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text('Camera Example')),
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPreview(_controller);
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            await _initializeControllerFuture;
-            final image = await _controller.takePicture();
-            // Do something with the captured image
-          } catch (e) {
-            print('Error: $e');
-          }
-        },
-        child: Icon(Icons.camera),
+      body: CameraPreview(_cameraController!),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _takePhoto,
+            child: Icon(Icons.camera),
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: _recordVideo,
+            child: Icon(_isRecording ? Icons.stop : Icons.videocam),
+          ),
+        ],
       ),
     );
   }
