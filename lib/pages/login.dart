@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/provider/auth.provider.dart';
-import 'package:flutter_application_test/provider/profile.provider.dart';
+import 'package:flutter_application_test/models/auth.model.dart';
+import 'package:flutter_application_test/models/profile.model.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {

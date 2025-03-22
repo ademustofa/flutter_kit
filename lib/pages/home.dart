@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/provider/auth.provider.dart';
-import 'package:flutter_application_test/provider/profile.provider.dart';
 import 'package:provider/provider.dart';
+
+// model
+import 'package:flutter_application_test/models/poke.model.dart';
+
+// View model
+import 'package:flutter_application_test/provider/poke.provider.dart';
+
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,20 +17,33 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   @override
   Widget build(BuildContext context) {
-    final profileModel = Provider.of<ProfileProvider>(context);
-    final authModel = Provider.of<AuthProvider>(context);
+    final pokemonModel = Provider.of<PokemonProvider>(context);
 
-    return Scaffold(
-      body: SafeArea(child: Column(
-        children: [
-          Text('is logged in ${authModel.isLoggin}'),
-          Text('My Name is: ${profileModel.fullname}'),
-          Text('Contact: ${profileModel.noHp}'),
-          
-        ],
-      )),
+     return Scaffold(
+      appBar: AppBar(
+        title: Text('Pokemon List'),
+      ),
+      body: pokemonModel.isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: pokemonModel.pokemons.length,
+              itemBuilder: (context, index) {
+                Pokemon pokemon = pokemonModel.pokemons[index];
+                return ListTile(
+                  title: Text(pokemon.name),
+                  subtitle: Text(pokemon.url),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          pokemonModel.fetchPokemons();
+        },
+        child: Icon(Icons.refresh),
+      ),
     );
   }
 }

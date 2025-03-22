@@ -1,7 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_test/provider/auth.provider.dart';
-import 'package:flutter_application_test/provider/profile.provider.dart';
+import 'package:flutter_application_test/models/auth.model.dart';
+import 'package:flutter_application_test/models/profile.model.dart';
+import 'package:flutter_application_test/provider/poke.provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => PokemonProvider()),
       ],
       child: MyApp(cameras: cameras),
     ),
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/camera',
+      initialRoute: '/home',
       routes: {
         '/': (context) => Loading(),
         '/camera': (context) => CameraScreen(cameras: cameras),
