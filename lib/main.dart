@@ -2,8 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_test/models/auth.model.dart';
 import 'package:flutter_application_test/models/profile.model.dart';
+import 'package:flutter_application_test/pages/profile.dart';
 import 'package:flutter_application_test/provider/poke.provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/home.dart';
@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Home(),
         '/login': (context) => Login(),
         '/location': (context) => ChooseLocation(),
+        '/profile': (context) => Profile(),
         '/dataRegister': (context) => DataRegister(),
       },
     );

@@ -18,6 +18,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final call = context.read<PokemonProvider>();
+      call.fetchPokemons();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final pokemonModel = Provider.of<PokemonProvider>(context);
@@ -32,9 +41,14 @@ class _HomeState extends State<Home> {
               itemCount: pokemonModel.pokemons.length,
               itemBuilder: (context, index) {
                 Pokemon pokemon = pokemonModel.pokemons[index];
-                return ListTile(
-                  title: Text(pokemon.name),
-                  subtitle: Text(pokemon.url),
+                return GestureDetector(
+                   onTap: () {
+                    Navigator.pushNamed(context, '/profile', arguments: pokemon.name);
+                  },
+                  child: ListTile(
+                    title: Text(pokemon.name),
+                    subtitle: Text(pokemon.url),
+                  ),
                 );
               },
             ),
