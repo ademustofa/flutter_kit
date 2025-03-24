@@ -10,17 +10,41 @@ class PokemonProvider with ChangeNotifier {
   PokemonDetail? _detailPokemon;
   
   bool _isLoading = false;
+  bool _hasMore = true;
+  int _offset = 0;
+  final int _limit = 20;
+
 
   List<Pokemon> get pokemons => _pokemons;
   PokemonDetail? get detailPokemon => _detailPokemon;
-  bool get isLoading => _isLoading;
 
-  Future<void> fetchPokemons() async {
+  bool get isLoading => _isLoading;
+  bool get hasMore => _hasMore;
+
+  Future<void> fetchPokemons({bool loadMore = false}) async {
+    if (_isLoading) return;
     _isLoading = true;
+    
+     if (!loadMore) {
+      _offset = 0;
+      _hasMore = true;
+    }
     notifyListeners();
 
     try {
-      _pokemons = await _pokemonService.fetchPokemons();
+      final newPokemons = await _pokemonService.fetchPokemons(  
+        limit: _limit,
+        offset: _offset
+      );
+      
+      if (loadMore) {
+        _pokemons.addAll(newPokemons);
+      } else {
+        _pokemons = newPokemons;
+      }
+
+       _offset += _limit;
+      _hasMore = newPokemons.isNotEmpty;
     } catch (e) {
       // Handle error
       print(e);

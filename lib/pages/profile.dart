@@ -17,12 +17,12 @@ class _ProfileState extends State<Profile> {
     super.initState();
 
     // Use addPostFrameCallback to access the context after the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final args = ModalRoute.of(context)!.settings.arguments as String?;
-      final call = context.read<PokemonProvider>();
+      final reqApiPokemon = context.read<PokemonProvider>();
       if (args != null) {
         // print("param: ${args}")
-        call.fetchDetailPokemon(args);
+        await reqApiPokemon.fetchDetailPokemon(args);
         setState(() {
           pokemonName = args;
         });

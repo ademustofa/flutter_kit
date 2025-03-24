@@ -12,8 +12,8 @@ void printPrettyJson(Map<String, dynamic> json) {
 class PokemonService {
   final String baseUrl = 'https://pokeapi.co/api/v2/pokemon';
 
-  Future<List<Pokemon>> fetchPokemons() async {
-    final response = await http.get(Uri.parse('$baseUrl?limit=20'));
+  Future<List<Pokemon>> fetchPokemons({int limit = 20, int offset = 0}) async {
+    final response = await http.get(Uri.parse('$baseUrl?limit=$limit&offset=$offset'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
