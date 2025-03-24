@@ -38,7 +38,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: Text('Ninja ID Card', style: TextStyle(color: Colors.white)),
+        title: Text('Pokemon Detail', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.grey[850],
         elevation: 0.0,
@@ -52,7 +52,7 @@ class _ProfileState extends State<Profile> {
           children: [
             Center(
               child: CircleAvatar(
-                backgroundImage: AssetImage("assets/souma.jpeg"),
+                backgroundImage: NetworkImage(pokemonModel.detailPokemon!.imageUrl),
                 radius: 40.0,
               ),
             ),
